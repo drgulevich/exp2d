@@ -62,10 +62,11 @@ double complex cfactor;
 
 double Ec, Ex, Elp, OmegaRabi;
 double ky[NPKY]={0., 0.15e6, 0.44e6, 0.74e6, 1.03e6, 1.31e6}; // m^-1
-double d=3.0e-6;
+//double d=3.0e-6;
+double Lphys = 2.*2.9e-6; // size of the lattice constant in m^-1
 int Pky[NPKY];
 for(i=0;i<NPKY;i++)
-    Pky[i]=lround(d*ky[i]/dky);
+    Pky[i]=lround(Lphys*ky[i]/dky);
 
 fftw_complex *psi, *fpsi;
 psi = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * M2);
