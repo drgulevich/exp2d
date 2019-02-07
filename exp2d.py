@@ -8,21 +8,21 @@ import time
 # Assume square MxM cell of unit length 
 # M: number of nodes along one direction
 # R: radius of the pillar (relative to the cell length)
-# Returns: potential in the range [0,1]
-def U_Square(M, R):
+# Returns: complex potential in the range [0,1]
+def U_Square(M, R, Uin, Uout):
     assert M%2==0
     Mhalf=round(M/2)
     dr=1./M
 
     Rbound=(R/dr)**2
-    U=np.ones((M,M),dtype=np.float64)
+    U=Uout*np.ones((M,M),dtype=np.complex128)
     for i in range(M):
         for j in range(M):
             for cx,cy in [(Mhalf,Mhalf)]:
                 di=i-cx
                 dj=j-cy
                 if(di*di+dj*dj <= Rbound):
-                    U[i,j] = 0.
+                    U[i,j] = Uin
 
     return U
 
@@ -30,21 +30,21 @@ def U_Square(M, R):
 # Assume square MxM cell of unit length 
 # M: number of nodes along one direction
 # R: radius of the pillar (relative to the cell length)
-# Returns: potential in the range [0,1]
-def U_Lieb(M, R):
+# Returns: complex potential in the range [0,1]
+def U_Lieb(M, R, Uin, Uout):
     assert M%2==0
     Mhalf=round(M/2)
     dr=1./M
 
     Rbound=(R/dr)**2
-    U=np.ones((M,M),dtype=np.float64)
+    U=Uout*np.ones((M,M),dtype=np.complex128)
     for i in range(M):
         for j in range(M):
             for cx,cy in [(0,Mhalf),(Mhalf,0),(Mhalf,Mhalf),(Mhalf,M),(M,Mhalf)]:
                 di=i-cx
                 dj=j-cy
                 if(di*di+dj*dj <= Rbound):
-                    U[i,j] = 0.
+                    U[i,j] = Uin
 
     return U
 
