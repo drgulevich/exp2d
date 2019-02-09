@@ -1,12 +1,7 @@
-//-------------------------------
-//-- Date: 3 Oct 2016 ----------
-//-- Engineer: Dmitry Gulevich --
-//-----------------------------------------------------------------------------------
-// To set OpenMP environment variable:
-// $ export OMP_NUM_THREADS=6
-// $ export OMP_NUM_THREADS=8
-// $ echo $OMP_NUM_THREADS
-//
+//------------------------------
+//------ Date: 9 Feb 2019 ------
+//----- Dmitry R. Gulevich -----
+//------------------------------
 #include <stdio.h>
 #include <stdlib.h> // malloc, rand
 #include <complex.h> // complex numbers
@@ -27,9 +22,23 @@ inline int row(int i, int j) {
     return My*i+j;
 }
 
-
-// M: total number of points along one dimension, even number
-void evolve(double complex *psi_py, double complex *fpsi_array, double Length, int M, double dt, int Nframes, int countout, double complex *U, double *ky, int Nky)
+/* 
+ Function description:
+ 	Calculates linear dynamics of exciton-polaritons without TE-TM splitting
+ Input:
+	 double complex *psi_py: input psi array
+	 double complex *fpsi_array: output Fourier transform of psi of size Nframes x Nky x M
+	 double Length: length of the domain along one direciton
+	 int M: total number of points along one dimension, should be even number
+	 double dt: timestep
+	 int Nframes: number of time frames to output
+	 int countout: output will be produced severy countout timestep
+	 double complex *U: complex potential (imaginary part accounts for losses)
+	 double *ky: values of ky for which the records will be taken 
+	 int Nky: number of ky values 
+ Output:
+	writes data to fpsi_array */
+void linear_dynamics(double complex *psi_py, double complex *fpsi_array, double Length, int M, double dt, int Nframes, int countout, double complex *U, double *ky, int Nky)
 {
 printf("############################################################\n");
 printf("# Running C Extension Module\n");
@@ -122,14 +131,35 @@ fftw_free(fpsi);
 }
 
 
-
-//void lattice(double complex *psi1_py, double complex *psi2_py, double complex *psi1data, double complex *psi2data, double Lcell, 
-//    int Nxcells, int Nycells, int Mhalf, double dt, int Nframes, int countout, double complex *U, double *nR, double alpha, double beta, double Omega,
-//    double A0, double omegadrive, double R, double xrel, double yrel)
-
-// Mx_in, My_in -- even numbers
-// i0, j0 -- indices of the drive center
-void lattice(double complex *psi1_py, double complex *psi2_py, double complex *psi1data, double complex *psi2data,  
+/* 
+ Function description:
+	Calculates nonlinear dynamics of exciton-polaritons in presence of TE-TM splitting,
+	magnetic field and coherent pumping.
+ Input:
+	 double complex *psi1_py: input array for the 1st circular polarized component
+	 double complex *psi2_py: input array for the 2nd circular polarized component
+	 double complex *psi1data: output array with psi1 values
+	 double complex *psi2data: output array with psi2 values
+	 double Lx: length along x
+	 double Ly: length along y
+	 int Mx_in: number of nodes along x, even number
+	 int My_in: number of nodes along y, even number
+	 double dt: timestep
+	 int Nframes: number of time frames to output
+	 int countout: output will be produced severy countout timestep
+	 double complex *U: complex potential (imaginary part accounts for losses)
+	 double alpha: nonlinearity parameter
+	 double beta: TE-TM splitting parameter
+	 double Omega: magnetic field
+	 double A1amp: amplitude of the drive for the 1st component
+	 double A2amp: amplitude of the drive for the 2nd component
+	 double omegadrive: driving frequency
+	 double R: radius of the driving spot (assuming a Gaussian)
+	 int i0: location of the center of the driving spot (index of the node along x)
+	 int j0: location of the center of the driving spot (index of the node along y)
+ Output:
+	writes data to psi1data, psi2data */
+void nonlinear_dynamics(double complex *psi1_py, double complex *psi2_py, double complex *psi1data, double complex *psi2data,  
     double Lx, double Ly, int Mx_in, int My_in, double dt, int Nframes, int countout, double complex *U, double alpha, double beta, double Omega,
     double A1amp, double A2amp, double omegadrive, double R, int i0, int j0)
 {       
@@ -281,30 +311,4 @@ fftw_free(psi2);
 fftw_free(fpsi1);
 fftw_free(fpsi2);  
 }
-
-
-
-
-/*
-int main() 
-{
-int P=5;
-int MM2=2*(2*P+1)*(2*P+1);
-int Niter=1;
-double mu=1.;
-
-double complex *psi_py = malloc( (2*P+1)*(2*P+1) * sizeof(double complex) );
-double complex *rhs = malloc(  MM2* sizeof(double complex) );
-double complex *matrix = malloc( MM2*MM2 * sizeof(double complex) );
-solid(psi_py, P, 10., mu, matrix, Niter, rhs);
-return 0;
-}
-*/
-
-// For Reference:
-/*    
-//memcpy(fpsinew, fpsi, MM2*sizeof(double complex));
-//printf("# test %f%+fi\n", creal(psi_py[0]),cimag(psi_py[0]));
-//double complex *psi = malloc( M2 * sizeof(double complex) );
-*/
 
