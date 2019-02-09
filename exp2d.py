@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.sparse import csc_matrix
 from scipy.sparse import dia_matrix
+from scipy.sparse import bsr_matrix
 from scipy.sparse import linalg
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
@@ -168,6 +169,112 @@ def eigsystem(M, U, kxrange, kyrange, Nbands):
 
     return evalsarr,evecsarr
 
+
+### Calculate evals,evecs for a range of kx,ky values in Re[U(x,y)]
+# M: number of nodes along one direction
+# U: complex potential (only real part is used)
+# kxrange: range of kx values
+# kyrange: range of ky values
+# Nbands: number of bands
+def eigsystem_tetm(M, U, kxrange, kyrange, Nbands, beta0=0., Omega=0.):
+
+    Mx=M
+    My=M
+    M2=Mx*My
+    dr=1./M
+    dr2=dr*dr
+
+    # 2x2 matrices
+    id1=np.array([[1,0],[0,1]])
+    A=np.array([[-1,-beta0],[-beta0,-1]])
+    B=np.array([[0,-1j*beta0/2.],[1j*beta0/2.,0]])
+    C=np.array([[-1,beta0],[beta0,-1]])
+
+    AAindices = np.concatenate(( 
+        np.array([1, My-1]),
+        np.array([[0+x,2+x] for x in range(My-2)]).ravel(),
+        np.array([0, My-2]) ))
+    AAindptr = np.arange(0,2*My+2,2)
+
+    BBdiagblock=np.stack(( 
+        [B.T]*(My-2), 
+        [C]*(My-2), 
+        [B]*(My-2) ), axis=1).reshape(3*(My-2),2,2)
+    BBindices = np.concatenate(( 
+        np.array([0, 1, My-1]),
+        np.array([[0+x,1+x,2+x] for x in range(My-2)]).ravel(),
+        np.array([0, My-2, My-1]) ))
+    BBindptr = np.arange(0,3*My+3,3)
+
+    diag=dia_matrix(( 4.+dr2*U.real.ravel().repeat(2) ,0),shape=(2*M2,2*M2))
+    Omegadiag = dia_matrix(([dr2*Omega,-dr2*Omega]*M2,0),shape=(2*M2,2*M2)) ### Zeeman splitting
+
+    evalslist=[]
+    evecslist=[]
+
+    for ky in kyrange: 
+        eky=np.exp(-1j*ky)
+
+        # Block AA
+        AAdata = np.concatenate(( 
+            np.array([A,A*eky]),
+            np.array([A]*2*(My-2)), 
+            np.array([A*np.conjugate(eky),A]) ), axis=0)
+        AA=bsr_matrix((AAdata, AAindices, AAindptr), shape=(2*My, 2*My)).todense()
+        
+        # Block BB
+        BBdata = np.concatenate(( 
+            np.array([C,B,B.T*eky]),
+            BBdiagblock, 
+            np.array([B*np.conjugate(eky),B.T,C]) ), axis=0)
+        BB=bsr_matrix((BBdata, BBindices, BBindptr), shape=(2*My, 2*My)).todense()
+    
+        for kx in kxrange:
+    
+            ekx=np.exp(-1j*kx)
+
+            # Large matrix
+            diagblock=np.stack(( 
+                [BB.H]*(Mx-2), 
+                [AA]*(Mx-2), 
+                [BB]*(Mx-2) ), axis=1).reshape(3*(Mx-2),2*My,2*My)
+            data = np.concatenate(( 
+                np.array([AA,BB,BB.H*ekx]),
+                diagblock, 
+                np.array([BB*np.conjugate(ekx),BB.H,AA]) ), axis=0)
+            indices = np.concatenate(( 
+                np.array([0, 1, Mx-1]),
+                np.array([[0+x,1+x,2+x] for x in range(Mx-2)]).ravel(),
+                np.array([0, Mx-2, Mx-1]) ))
+            indptr = np.arange(0,3*Mx+3,3)
+            Matrix=bsr_matrix((data, indices, indptr), shape=(2*M2, 2*M2))
+    
+            # Add diagonal
+            Matrix += diag + Omegadiag
+            Matrix_CSC=Matrix.tocsc() ### can be improved by constructing CSC
+
+#            evalsunsorted=linalg.eigsh(Matrix_CSC, return_eigenvectors=False, k=Nbands, sigma=0)
+#            evalsunsorted/=dr2
+#            inds=np.argsort(evalsunsorted)
+#            evals=evalsunsorted[inds]
+#            evalslist.append(evals.ravel())
+
+            evalsunsorted,Tevecs=linalg.eigsh(Matrix_CSC, return_eigenvectors=True, k=Nbands, sigma=0)
+            evalsunsorted/=dr2
+            evecsunsorted=Tevecs.T   
+            inds=np.argsort(evalsunsorted)
+            evals=evalsunsorted[inds]
+            evecs=evecsunsorted[inds]
+            evalslist.append(evals.ravel())
+            evecslist.append(evecs.ravel())
+
+#    evalsarr=np.array(evalslist).reshape(kyrange.size,kxrange.size,Nbands)        
+
+    evalsarr=np.array(evalslist).reshape(kyrange.size,kxrange.size,Nbands)        
+    evecsarr=np.array(evecslist).reshape(kyrange.size,kxrange.size,Nbands,2*M2)
+
+#    return evalsarr
+    return evalsarr,evecsarr
 
 ### Display wavefunction Psi in real space
 def cpsi(Psi,interpolation=None):
