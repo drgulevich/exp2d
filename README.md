@@ -9,6 +9,8 @@ Python/C code for simulation of exciton-polaritons in artificial 2D lattices.
 
 ``nonlinear-pump.ipynb``: time-evolution in the nonlinear regime is presence of a TE-TM splitting and coherent pumping.
 
+![Alt text](/examples/square.gif?raw=true "Square lattice under coherent pumping")
+
 **Supplementary files**
 
 ``README.md``: this file.
@@ -16,6 +18,8 @@ Python/C code for simulation of exciton-polaritons in artificial 2D lattices.
 ``exp2d.c``: C library (used by ``linear-farfield.ipynb`` and ``nonlinear-pump.ipynb``).
 
 ``Makefile``: Makefile to compile the supplementary C library (libexp2d.so produced as an output).
+
+``examples``: A folder containing animation examples.
 
 **Research papers using exp2d**
 

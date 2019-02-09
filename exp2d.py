@@ -299,7 +299,7 @@ def cpsi12(Psi1,Psi2,interpolation=None):
 
 ### Display wavefunction Psi in real space
 ### Animation example: http://matplotlib.org/examples/animation/dynamic_image.html
-def vipsi(Psidata,interpolation=None):
+def vipsi(Psidata,interpolation=None,repeat=False):
     rhomax=np.max(abs(Psidata*np.conjugate(Psidata)))
     fig, ax = plt.subplots(figsize=(18,6))
     plt.axis('off')
@@ -311,19 +311,21 @@ def vipsi(Psidata,interpolation=None):
         return im,
     def init():
         return updatefig(0)
-    anim = animation.FuncAnimation(fig, updatefig, np.arange(Psidata.shape[0]), init_func=init, interval=100, blit=True, repeat=False)
+    anim = animation.FuncAnimation(fig, updatefig, np.arange(Psidata.shape[0]), init_func=init, interval=100, blit=True, repeat=repeat)
     plt.close(fig)
     return anim
 
 
 ### Display two wavefunctions Psi1, Psi2 in real space
 ### Animation example: http://matplotlib.org/examples/animation/dynamic_image.html
-def vipsi12(Psi1data,Psi2data,interpolation=None):
-    rho1max=np.max(abs(Psi1data*np.conjugate(Psi1data)))
-    rho2max=np.max(abs(Psi2data*np.conjugate(Psi2data)))
+def vipsi12(Psi1data,Psi2data,interpolation=None,repeat=False):
     fig, ax = plt.subplots(1,2,figsize=(12,5))
+    ax[0].set_title(r'$|\psi_+|^2$',fontsize=18)
+    ax[1].set_title(r'$|\psi_-|^2$',fontsize=18)
     ax[0].axis('off')
     ax[1].axis('off')
+    rho1max=np.max(abs(Psi1data*np.conjugate(Psi1data)))
+    rho2max=np.max(abs(Psi2data*np.conjugate(Psi2data)))
     rho1data=(Psi1data[0,:,:]*np.conjugate(Psi1data[0,:,:])).real
     rho2data=(Psi2data[0,:,:]*np.conjugate(Psi2data[0,:,:])).real
     im1=ax[0].imshow(rho1data.T, interpolation=interpolation, cmap = plt.cm.Blues_r, origin='lower',vmin=0,vmax=rho1max);
@@ -336,6 +338,6 @@ def vipsi12(Psi1data,Psi2data,interpolation=None):
         return im1,im2
     def init():
         return updatefig(0)
-    anim = animation.FuncAnimation(fig, updatefig, np.arange(Psi1data.shape[0]), init_func=init, interval=100, blit=True, repeat=False)
+    anim = animation.FuncAnimation(fig, updatefig, np.arange(Psi1data.shape[0]), init_func=init, interval=100, blit=True, repeat=repeat)
     plt.close(fig)
     return anim

@@ -202,12 +202,6 @@ ifftpsi2 = fftw_plan_dft_2d(Mx, My, fpsi2, psi2, FFTW_BACKWARD, FFTW_MEASURE);
 memcpy(psi1, psi1_py, M2*sizeof(double complex));
 memcpy(psi2, psi2_py, M2*sizeof(double complex));
 
-// --- Display info, tests ---
-
-printf("psi1_py[0]=%f%+fi\n",creal(psi1_py[0]),cimag(psi1_py[0]));
-printf("psi1[0]=%f%+fi\n",creal(psi1[0]),cimag(psi1[0]));
-printf("Mx=%d, My=%d, alpha=%.2f, beta=%.2f\n",Mx,My,alpha,beta);
-
 double dx = Lx/Mx;
 double dy = Ly/My;
 
