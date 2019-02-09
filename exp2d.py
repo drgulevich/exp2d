@@ -286,6 +286,10 @@ def cpsi(Psi,interpolation=None):
 ### Display two wavefunctions in real space
 def cpsi12(Psi1,Psi2,interpolation=None):
     fig,ax=plt.subplots(1,2,figsize=(12,5))
+    ax[0].set_title(r'$|\psi_+|^2$',fontsize=18)
+    ax[1].set_title(r'$|\psi_-|^2$',fontsize=18)
+    ax[0].axis('off')
+    ax[1].axis('off')
 
     data1=(Psi1*np.conjugate(Psi1)).real
     img1=ax[0].imshow(data1.T, interpolation=interpolation,cmap = plt.cm.Blues_r, origin='lower')
