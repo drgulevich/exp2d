@@ -1,5 +1,5 @@
 # exp2d
-Python/C code for simulation of exciton-polaritons in artificial 2D lattices.
+Python/C code for simulation of exciton-polaritons in artificial 2D lattices. 
 
 **Jupyter notebook interactive examples**
 
