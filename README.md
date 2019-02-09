@@ -30,4 +30,4 @@ is below (Fig.S9a of the Supplementary Material of Ref.[1]):
 
 **Research papers using exp2d**
 
-1. C. E. Whittaker, E. Cancellieri, P. M. Walker, D. R. Gulevich, H. Schomerus, D. Vaitiekus, B. Royall, D. M. Whittaker, E. Clarke, I. V. Iorsh, I. A. Shelykh, M. S. Skolnick, and D. N. Krizhanovskii, "Exciton Polaritons in a Two-Dimensional Lieb Lattice with Spin-Orbit Coupling", Phys. Rev. Lett. 120, 097401 (2018).
+1. C. E. Whittaker, E. Cancellieri, P. M. Walker, D. R. Gulevich, H. Schomerus, D. Vaitiekus, B. Royall, D. M. Whittaker, E. Clarke, I. V. Iorsh, I. A. Shelykh, M. S. Skolnick, and D. N. Krizhanovskii, "Exciton Polaritons in a Two-Dimensional Lieb Lattice with Spin-Orbit Coupling", Phys. Rev. Lett. 120, 097401 (2018). https://arxiv.org/abs/1705.03006.
