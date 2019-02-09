@@ -20,6 +20,8 @@ is below (Fig.S9a of the Supplementary Material of Ref.[1]):
 
 ``README.md``: this file.
 
+``exp2d.py``: Python module containing function definitions etc.
+
 ``exp2d.c``: C library (used by ``linear-farfield.ipynb`` and ``nonlinear-pump.ipynb``).
 
 ``Makefile``: Makefile to compile the supplementary C library (libexp2d.so produced as an output).
