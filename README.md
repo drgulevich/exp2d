@@ -31,12 +31,15 @@ is below (Fig.S9a of the Supplementary Material of Ref.[1]):
 **Installation**
 
 1. Clone:
+
     $ git clone https://github.com/drgulevich/exp2d.git
 
 2. Make:
+
     $ make
 
 3. Use:
+
     $ jupyter notebook linear-farfield.ipynb
     $ jupyter notebook linear-tetm.ipynb
     $ jupyter notebook nonlinear-pump.ipynb
