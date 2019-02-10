@@ -28,6 +28,22 @@ is below (Fig.S9a of the Supplementary Material of Ref.[1]):
 
 ``examples``: A folder containing animation examples.
 
+**Installation**
+
+1. Clone:
+    $ git clone https://github.com/drgulevich/exp2d.git
+
+2. Make:
+    $ make
+
+3. Use:
+    $ jupyter notebook linear-farfield.ipynb
+    $ jupyter notebook linear-tetm.ipynb
+    $ jupyter notebook nonlinear-pump.ipynb
+
+The provided ``makefile`` is suitable for compilation on Linux machines. Modify the file accordingly to suit your needs. On MaC systems the flag
+``-soname`` for compilation of the C shared library may need to be replaced by ``-install_name``.
+
 **Research papers using exp2d**
 
 1. C. E. Whittaker, E. Cancellieri, P. M. Walker, D. R. Gulevich, H. Schomerus, D. Vaitiekus, B. Royall, D. M. Whittaker, E. Clarke, I. V. Iorsh, I. A. Shelykh, M. S. Skolnick, and D. N. Krizhanovskii, "Exciton Polaritons in a Two-Dimensional Lieb Lattice with Spin-Orbit Coupling", Phys. Rev. Lett. 120, 097401 (2018). https://arxiv.org/abs/1705.03006.
