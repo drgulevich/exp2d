@@ -50,3 +50,5 @@ The provided ``makefile`` is suitable for compilation on Linux machines. Modify 
 **Research papers using exp2d**
 
 1. C. E. Whittaker, E. Cancellieri, P. M. Walker, D. R. Gulevich, H. Schomerus, D. Vaitiekus, B. Royall, D. M. Whittaker, E. Clarke, I. V. Iorsh, I. A. Shelykh, M. S. Skolnick, and D. N. Krizhanovskii, "Exciton Polaritons in a Two-Dimensional Lieb Lattice with Spin-Orbit Coupling", Phys. Rev. Lett. 120, 097401 (2018). https://arxiv.org/abs/1705.03006.
+
+2. D. R. Gulevich and D. Yudin, "Mimicking graphene with polaritonic spin vortices", Phys. Rev. B 96, 115433 (2017). https://arxiv.org/abs/1707.09195.
